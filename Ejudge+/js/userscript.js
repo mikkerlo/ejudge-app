@@ -1,7 +1,7 @@
 // fix title
 var info;
 
-var infoRegExp = /([a-zA-Zа-яА-Я ]+)\[.*(16[0-9]-[12])/;
+var infoRegExp = /([a-zA-Zа-яА-Я ]+)\[.*(17[0-9]-[12])/;
 
 function parseInfo(title) {
   var res = title.match(infoRegExp);
@@ -14,20 +14,28 @@ function parseInfo(title) {
 
 function updateTitle() {
   title = document.querySelector('#l12 .main_phrase');
-  info = parseInfo(title.innerText);
-  title.innerHTML = "Кокосик";
-  title.style.opacity = "1";
+  if (title) {
+    info = parseInfo(title.innerText);
+    title.innerHTML = "Кокосик";
+    title.style.opacity = "1";
+  }
 }
 
 // update person info
 function updateInfo(info) {
   // oldTitle //
-  chrome.storage.local.set({type: 'fkm-info', info: info});
+  chrome.storage.local.set({
+    type: 'fkm-info',
+    info: info
+  });
 }
 
 
 // find
-function hide(obj) { obj.style.display = 'none'; }
+function hide(obj) {
+  obj.style.display = 'none';
+}
+
 function hideBySelector(selector) {
   document.querySelectorAll(selector).forEach(hide);
 }
@@ -43,7 +51,9 @@ function getProblems(textRegexp) {
 
   return [].filter.call(problems, function f(obj) {
     return reg.test(obj.innerHTML);
-  }).map(function f(obj) { return obj.parentNode; });
+  }).map(function f(obj) {
+    return obj.parentNode;
+  });
 }
 
 function hideProblemsByText(textRegexp) {
@@ -71,6 +81,9 @@ function hideProblems(options) {
 // show all problems and hide correct again
 function updateProblems() {
   var pList = document.querySelector('#probNavRightList');
+  if (!pList) {
+    return;
+  }
   pList.style.display = 'none';
 
   [].forEach.call(pList.children, function f(obj) {
@@ -82,8 +95,7 @@ function updateProblems() {
 
 // saveOptions to localStorage, update current value
 function saveOptions(options) {
-  var newoptions = Object.assign(
-    {},
+  var newoptions = Object.assign({},
     JSON.parse(localStorage['fkm-options'] || '{}'),
     options);
   localStorage['fkm-options'] = JSON.stringify(newoptions);
@@ -97,12 +109,13 @@ function getOptions() {
 
 // listen requests
 chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if(request.type == 'fkm-update-problems') {
+  function (request, sender, sendResponse) {
+    if (request.type == 'fkm-update-problems') {
       data = saveOptions(request.data);
       updateProblems(data);
     }
-  });
+  }
+);
 
 updateTitle();
 if (info) {

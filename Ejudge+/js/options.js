@@ -10,12 +10,17 @@ function saveOption(event) {
     data['hideReg'] = target.value;
   }
 
-  chrome.storage.sync.set(data, function() {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  chrome.storage.sync.set(data, function () {
+    chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    }, function (tabs) {
       chrome.tabs.sendMessage(
-        tabs[0].id,
-        {data: data, type:'fkm-update-problems'},
-        function(response) {});
+        tabs[0].id, {
+          data: data,
+          type: 'fkm-update-problems'
+        },
+        function (response) {});
     });
   });
 }
@@ -26,7 +31,7 @@ function restoreOptions() {
     hideBad: false,
     hideNew: false,
     hideReg: ''
-  }, function(items) {
+  }, function (items) {
     document.getElementById('hideOk').checked = items.hideOk;
     document.getElementById('hideBad').checked = items.hideBad;
     document.getElementById('hideNew').checked = items.hideNew;
