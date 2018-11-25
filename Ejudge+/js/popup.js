@@ -2,9 +2,8 @@ function updateInfo() {
   console.log("update popup");
 }
 
-chrome.storage.onChanged.addListener(function (changes, areaName) {
-  console.log('works');
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+  console.log("works");
 });
 
-
-console.log('kek', chrome, chrome.storage);
+console.log("kek", chrome, chrome.storage);

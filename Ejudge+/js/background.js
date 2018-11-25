@@ -14,25 +14,25 @@ function checkUrl(tabId, changeInfo, tab) {
   updatePopup(tabId, tab);
 }
 
-
-chrome.tabs.onCreated.addListener(function (tab) {
+chrome.tabs.onCreated.addListener(function(tab) {
   checkUrl(tab.id, null, tab);
 });
 
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  if (changeInfo.status == 'complete') {
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  if (changeInfo.status == "complete") {
     checkUrl(tabId, changeInfo, tab);
   }
 });
 
-chrome.tabs.onActivated.addListener(function () {
-  updatePopup
+chrome.tabs.onActivated.addListener(function() {
+  updatePopup;
 });
 
 var user;
 
-chrome.runtime.onMessage.addListener( // update user request
-  function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(
+  // update user request
+  function(request, sender, sendResponse) {
     // console.log('eeee', request);
   }
 );
