@@ -3,8 +3,7 @@ function updateInfo() {
 }
 
 chrome.storage.onChanged.addListener(function(changes, areaName) {
-  console.log('works');
+  console.log("works");
 });
 
-
-console.log('kek', chrome, chrome.storage);
+console.log("kek", chrome, chrome.storage);
