@@ -1,119 +1,163 @@
-// fix title
-var info;
+//////////// Utils ////////////
 
-var infoRegExp = /([a-zA-Zа-яА-Я ]+)\[.*(17[0-9]-[12])/;
-
-function parseInfo(title) {
-  var res = title.match(infoRegExp);
-  if (res) {
-    res = [res[1].trim(), res[2].trim()];
-    if (res[0] !== "User login page") return res;
-  }
+const storageGet = arg => {
+    return new Promise(resolve => chrome.storage.sync.get(arg, resolve))
 }
 
-function updateTitle() {
-  title = document.querySelector("#l12 .main_phrase");
-  if (title) {
-    info = parseInfo(title.innerText);
-    title.innerHTML = "Кокосик";
-    title.style.opacity = "1";
-  }
+const storageSet = arg => {
+    return new Promise(resolve => chrome.storage.sync.set(arg, resolve))
 }
 
-// update person info
-function updateInfo(info) {
-  // oldTitle //
-  chrome.storage.local.set({
-    type: "fkm-info",
-    info: info
-  });
+//////////// Title ////////////
+
+const parseTitleInfo = title => {
+    const infoRegExp = /([a-zA-Zа-яА-Я ]+)\[.*(17[0-9]-[12])/
+
+    const res = title.match(infoRegExp)
+    if (!res) {
+        return null
+    }
+
+    const info = [res[1].trim(), res[2].trim()]
+    if (info[0] === "User login page") {
+        return null
+    }
+
+    return info
 }
 
-// find
-function hide(obj) {
-  obj.style.display = "none";
+const beautifyTitle = elem => {
+    elem.innerHTML = "Кокосик"
+    elem.style.opacity = "1"
 }
 
-function hideBySelector(selector) {
-  document.querySelectorAll(selector).forEach(hide);
+//////////// Problems ////////////
+
+const filterProblemsByReg = (problems, regexp) => {
+    try {
+        const reg = new RegExp(regexp)
+        return problems.filter(it => reg.test(it.innerText))
+    } catch (e) {}
+    return []
 }
 
-function getProblems(textRegexp) {
-  try {
-    var reg = new RegExp(textRegexp);
-  } catch (e) {
-    return [];
-  }
+const hideProblems = (problems, options) => {
+    problems.forEach(it => (it.style.display = ""))
 
-  var problems = document.querySelectorAll("#probNavRightList a");
+    const hideOk = options.hideOk
+        ? Array.from(document.querySelectorAll("#probNavRightList .probOk"))
+        : []
 
-  return [].filter
-    .call(problems, function f(obj) {
-      return reg.test(obj.innerHTML);
+    const hideBad = options.hideBad
+        ? Array.from(document.querySelectorAll("#probNavRightList .probBad"))
+        : []
+
+    const hideNew = options.hideNew
+        ? Array.from(document.querySelectorAll("#probNavRightList .probEmpty"))
+        : []
+
+    const hideReg = options.hideReg
+        ? filterProblemsByReg(problems, options.hideReg)
+        : []
+
+    const hide = [...hideOk, ...hideBad, ...hideNew, ...hideReg]
+    hide.forEach(it => (it.style.display = "none"))
+}
+
+const storeProblems = problems => {
+    const problemsStorage = {}
+
+    problems.forEach(it => {
+        const problem = {
+            name: it.innerText,
+            link: it.children[0].href,
+        }
+
+        problemsStorage[`problem_${problem.name}`] = problem
     })
-    .map(function f(obj) {
-      return obj.parentNode;
-    });
+
+    storageSet(problemsStorage)
 }
 
-function hideProblemsByText(textRegexp) {
-  getProblems(textRegexp).forEach(hide);
+//////////// Table ////////////
+
+const updateProblemHeader = (h, problem) => {
+    const a = document.createElement("a")
+    a.href = problem.link
+    a.textContent = problem.name
+
+    h.firstChild.remove()
+    h.appendChild(a)
 }
 
-var hideOkProblems = hideBySelector.bind({}, "#probNavRightList .probOk");
-var hideBadProblems = hideBySelector.bind({}, "#probNavRightList .probBad");
-var hideNewProblems = hideBySelector.bind({}, "#probNavRightList .probEmpty");
+const tableUpdate = () => {
+    const problemsList = document.querySelectorAll("th.st_prob")
+    if (!problemsList) {
+        console.log("Table header not found.")
+        return
+    }
 
-// hide required problems by options argument
-function hideProblems(options) {
-  if (options === undefined) options = getOptions();
-  if (options.hideOk) hideOkProblems();
-  if (options.hideBad) hideBadProblems();
-  if (options.hideNew) hideNewProblems();
-  if (options.hideReg) hideProblemsByText(options.hideReg);
+    const problems = Array.from(problemsList)
+
+    problems.forEach(h => {
+        const key = `problem_${h.innerText}`
+        storageGet(key)
+            .then(it => it[key])
+            .then(problem => problem && updateProblemHeader(h, problem))
+    })
 }
 
-// show all problems and hide correct again
-function updateProblems() {
-  var pList = document.querySelector("#probNavRightList");
-  if (!pList) {
-    return;
-  }
-  pList.style.display = "none";
+//////////// Main ////////////
 
-  [].forEach.call(pList.children, function f(obj) {
-    obj.style.display = "";
-  });
-  hideProblems();
-  pList.style.display = "";
+const problemsUpdate = () => {
+    const problemsList = document.querySelector("#probNavRightList")
+    if (!problemsList) {
+        console.log("Side panel with problems not found.")
+        return
+    }
+
+    const problems = Array.from(problemsList.children)
+
+    const fetchAndUpdate = () =>
+        storageGet({
+            hideOk: false,
+            hideBad: false,
+            hideNew: false,
+            hideReg: "",
+        }).then(options => hideProblems(problems, options))
+
+    // hide by current options
+    fetchAndUpdate()
+
+    // listen for options updates
+    chrome.runtime.onMessage.addListener(request => {
+        if (request.type === "fkm-update-problems") {
+            fetchAndUpdate()
+        }
+    })
+
+    // save problems in storage
+    storeProblems(problems)
 }
 
-// saveOptions to localStorage, update current value
-function saveOptions(options) {
-  var newoptions = Object.assign(
-    {},
-    JSON.parse(localStorage["fkm-options"] || "{}"),
-    options
-  );
-  localStorage["fkm-options"] = JSON.stringify(newoptions);
-  return newoptions;
+const kokosUpdate = () => {
+    const titleElem = document.querySelector("#l12 .main_phrase")
+    if (!titleElem) {
+        console.log("Title not found, not ejudge page. Exiting Ejudge+...")
+        return
+    }
+
+    const info = parseTitleInfo(titleElem.innerText)
+    beautifyTitle(titleElem)
+
+    if (!info) {
+        console.log("Title not parsed. Login page?")
+        return
+    }
+
+    problemsUpdate()
+    tableUpdate()
+    storageSet({ fkmInfo: info })
 }
 
-// load options from localStorage
-function getOptions() {
-  return JSON.parse(localStorage["fkm-options"] || "{}");
-}
-
-// listen requests
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.type == "fkm-update-problems") {
-    data = saveOptions(request.data);
-    updateProblems(data);
-  }
-});
-
-updateTitle();
-if (info) {
-  updateProblems();
-  updateInfo(info);
-}
+kokosUpdate()

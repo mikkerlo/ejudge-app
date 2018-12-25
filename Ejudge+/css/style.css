@@ -332,6 +332,11 @@ html table.standings th {
   border: 1px solid #000;
 }
 
+th.st_prob a {
+  color: black;
+  text-decoration: none;
+}
+
 html .table tr {
   text-shadow: none;
   border: 1px solid #000;
