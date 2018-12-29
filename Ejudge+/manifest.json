@@ -2,7 +2,7 @@
   // Required
   "manifest_version": 2,
   "name": "Ejudge+",
-  "version": "1.2",
+  "version": "1.2.1",
 
   // Recommended
   "icons": {
@@ -36,7 +36,7 @@
       "matches": ["http://caos.ejudge.ru/*", "https://caos.ejudge.ru/*"],
       "css": ["css/style.css"],
       "run_at": "document_idle",
-      "js": ["js/userscript.js"]
+      "js": ["js/userscript.js", "js/snowflakes.js"]
     }
   ],
 
