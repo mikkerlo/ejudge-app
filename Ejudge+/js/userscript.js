@@ -90,6 +90,13 @@ const updateProblemHeader = (h, problem) => {
     h.appendChild(a)
 }
 
+const scrollTable = () => {
+    const l14 = document.querySelector("html .l14")
+    if (l14) {
+        l14.scrollLeft = l14.scrollWidth
+    }
+}
+
 const tableUpdate = () => {
     const problemsList = document.querySelectorAll("th.st_prob")
     if (!problemsList) {
@@ -105,6 +112,8 @@ const tableUpdate = () => {
             .then(it => it[key])
             .then(problem => problem && updateProblemHeader(h, problem))
     })
+
+    scrollTable()
 }
 
 //////////// Main ////////////

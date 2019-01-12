@@ -264,10 +264,21 @@ html .l14 {
   margin: 1em;
 }
 
+div.l14 h2,
+table.table-14,
 html #l13 .st_team,
 html #l13 .st_place {
   top: auto;
   position: absolute;
+  background: #ffffff;
+}
+
+table.table-14 {
+  top: 100px;
+}
+
+html #l13 .st_team,
+html #l13 .st_place {
   background: #ffffff;
 }
 
@@ -282,6 +293,7 @@ html #l13 .st_place {
 }
 
 html #l13 table.standings {
+  margin-top: 200px;
   margin-left: 215px;
   margin-bottom: 0;
 }
