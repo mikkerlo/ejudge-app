@@ -125,15 +125,15 @@ const showPercentile = () => {
     const standingsTop = standings.firstElementChild;
     const problemsNumber = standingsTop.querySelectorAll('.st_prob').length;
     let krsNumber = 0
-    Array.prototype.slice.call(standingsTop.querySelectorAll('.st_prob')).map(
+    Array.from(standingsTop.querySelectorAll('.st_prob')).map(
         (problem) => {
             if (problem.innerText.indexOf('kr') != -1) {
                 krsNumber += 1
             }
         }
     )
-    const users = Array.prototype.slice
-                    .call(standings.querySelectorAll('.st_team'))
+    const users = Array
+                    .from(standings.querySelectorAll('.st_team'))
                     .slice(1, -3)
     users.forEach(
         (user, index) => {
