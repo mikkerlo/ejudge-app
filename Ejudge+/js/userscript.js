@@ -97,25 +97,6 @@ const scrollTable = () => {
     }
 }
 
-const tableUpdate = () => {
-    const problemsList = document.querySelectorAll("th.st_prob")
-    if (!problemsList) {
-        console.log("Table header not found.")
-        return
-    }
-
-    const problems = Array.from(problemsList)
-
-    problems.forEach(h => {
-        const key = `problem_${h.innerText}`
-        storageGet(key)
-            .then(it => it[key])
-            .then(problem => problem && updateProblemHeader(h, problem))
-    })
-
-    scrollTable()
-}
-
 const showPercentile = () => {
     if (document.querySelector('.standings') === null) {
         console.log("Table not found.")
@@ -144,7 +125,26 @@ const showPercentile = () => {
         }
     )
 }
-showPercentile()
+
+const tableUpdate = () => {
+    const problemsList = document.querySelectorAll("th.st_prob")
+    if (!problemsList) {
+        console.log("Table header not found.")
+        return
+    }
+
+    const problems = Array.from(problemsList)
+
+    problems.forEach(h => {
+        const key = `problem_${h.innerText}`
+        storageGet(key)
+            .then(it => it[key])
+            .then(problem => problem && updateProblemHeader(h, problem))
+    })
+
+    scrollTable()
+    showPercentile()
+}
 
 //////////// Main ////////////
 
