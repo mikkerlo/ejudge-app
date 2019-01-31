@@ -139,9 +139,9 @@ const showPercentile = () => {
         (user, index) => {
             const userTotal = parseInt(
                 standings
-                .children[index + 1]
-                .querySelector('.st_score')
-                .innerText
+                    .children[index + 1]
+                    .querySelector('.st_score')
+                    .innerText
             )
             let userPercentile = parseInt(
                 userTotal / ((problemsNumber + krsNumber) * 100) * 100
