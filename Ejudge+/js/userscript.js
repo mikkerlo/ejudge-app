@@ -116,6 +116,36 @@ const tableUpdate = () => {
     scrollTable()
 }
 
+const showPercentile = () => {
+    if (document.querySelector('.standings') === null) {
+        console.log("Table not found.")
+        return
+    }
+    const standings = document.querySelector('.standings').firstElementChild;
+    const standingsTop = standings.firstElementChild;
+    const problemsNumber = standingsTop.querySelectorAll('.st_prob').length;
+    let krsNumber = 0
+    Array.prototype.slice.call(standingsTop.querySelectorAll('.st_prob')).map(
+        (problem) => {
+            if (problem.innerText.indexOf('kr') != -1) {
+                krsNumber += 1
+            }
+        }
+    )
+    const users = Array.prototype.slice.call(standings.querySelectorAll('.st_team')).slice(1, -3)
+    users.forEach(
+        (user, index) => {
+            const userTotal = parseInt(standings.children[index + 1].querySelector('.st_score').innerText)
+            let userPercentile = parseInt(userTotal / ((problemsNumber + krsNumber) * 100) * 100)
+            if (userTotal % (problemsNumber + krsNumber) !== 0) {
+                userPercentile += 1
+            }
+            user.innerText += ` (${userPercentile}%)`
+        }
+    )
+}
+showPercentile()
+
 //////////// Main ////////////
 
 const problemsUpdate = () => {
