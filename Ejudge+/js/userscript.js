@@ -132,11 +132,20 @@ const showPercentile = () => {
             }
         }
     )
-    const users = Array.prototype.slice.call(standings.querySelectorAll('.st_team')).slice(1, -3)
+    const users = Array.prototype.slice
+                    .call(standings.querySelectorAll('.st_team'))
+                    .slice(1, -3)
     users.forEach(
         (user, index) => {
-            const userTotal = parseInt(standings.children[index + 1].querySelector('.st_score').innerText)
-            let userPercentile = parseInt(userTotal / ((problemsNumber + krsNumber) * 100) * 100)
+            const userTotal = parseInt(
+                standings
+                .children[index + 1]
+                .querySelector('.st_score')
+                .innerText
+            )
+            let userPercentile = parseInt(
+                userTotal / ((problemsNumber + krsNumber) * 100) * 100
+            )
             if (userTotal % (problemsNumber + krsNumber) !== 0) {
                 userPercentile += 1
             }
