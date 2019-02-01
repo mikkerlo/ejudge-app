@@ -44,7 +44,7 @@ html #l12 {
 #main-cont #l11 {
   /* height: 100%; <--------------- */
   border: 3px 10px 3px 3px;
-  background: url('chrome-extension://__MSG_@@extension_id__/img/logo.png') no-repeat;
+  background: url('chrome-extension://__MSG_@@extension_id__/img/newyear.png') no-repeat;
   background-size: 100%;
   top: 0;
   z-index: 10;
@@ -264,10 +264,21 @@ html .l14 {
   margin: 1em;
 }
 
+div.l14 h2,
+table.table-14,
 html #l13 .st_team,
 html #l13 .st_place {
   top: auto;
   position: absolute;
+  background: #ffffff;
+}
+
+table.table-14 {
+  top: 100px;
+}
+
+html #l13 .st_team,
+html #l13 .st_place {
   background: #ffffff;
 }
 
@@ -282,6 +293,7 @@ html #l13 .st_place {
 }
 
 html #l13 table.standings {
+  margin-top: 200px;
   margin-left: 215px;
   margin-bottom: 0;
 }
@@ -330,6 +342,11 @@ html table.standings th {
   background: #CF79FF;
   text-shadow: none;
   border: 1px solid #000;
+}
+
+th.st_prob a {
+  color: black;
+  text-decoration: none;
 }
 
 html .table tr {
