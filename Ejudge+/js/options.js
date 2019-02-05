@@ -36,13 +36,15 @@ function restoreOptions() {
       hideOk: false,
       hideBad: false,
       hideNew: false,
-      hideReg: ""
+      hideReg: "",
+      disableSnow: false,
     },
     function(items) {
       document.getElementById("hideOk").checked = items.hideOk;
       document.getElementById("hideBad").checked = items.hideBad;
       document.getElementById("hideNew").checked = items.hideNew;
       document.getElementById("hideReg").value = items.hideReg;
+      document.getElementById("disableSnow").checked = items.disableSnow;
     }
   );
 }
@@ -53,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function onLoad() {
   document.getElementById("hideBad").addEventListener("change", saveOption);
   document.getElementById("hideNew").addEventListener("change", saveOption);
   document.getElementById("hideReg").addEventListener("keyup", saveOption);
+  document.getElementById("disableSnow").addEventListener("change", saveOption);
 });
 
 /* document.getElementById('hideBad').checked = items.hideBad;

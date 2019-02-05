@@ -146,6 +146,23 @@ const tableUpdate = () => {
     showPercentile()
 }
 
+//////////// Bells and Whistles ////////////
+
+const bellsAndWhistlesUpdate = () => {
+    const key = "disableSnow"
+    storageGet(key)
+        .then(it => it[key])
+        .then(disableSnow => {
+            if (!disableSnow) {
+                const sf = new Snowflakes({
+                    count: 50,
+                    minSize: 14,
+                    maxSize: 18
+                });
+            }
+        })
+}
+
 //////////// Main ////////////
 
 const problemsUpdate = () => {
@@ -196,6 +213,7 @@ const kokosUpdate = () => {
 
     problemsUpdate()
     tableUpdate()
+    bellsAndWhistlesUpdate()
     storageSet({ fkmInfo: info })
 }
 

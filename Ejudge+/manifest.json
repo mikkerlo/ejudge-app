@@ -31,7 +31,7 @@
       "matches": ["http://caos.ejudge.ru/*", "https://caos.ejudge.ru/*"],
       "css": ["css/style.css"],
       "run_at": "document_idle",
-      "js": ["js/userscript.js", "js/snowflakes.js"]
+      "js": ["js/snowflakes.js", "js/userscript.js"]
     }
   ],
 
