@@ -104,24 +104,73 @@ const showPercentile = () => {
     }
     const standings = document.querySelector('.standings').firstElementChild;
     const standingsTop = standings.firstElementChild;
+
+    const percentileElement = document.createElement('th')
+    percentileElement.setAttribute('class', 'st_score')
+    percentileElement.innerText = "Percentile"
+    standings.children[0].appendChild(percentileElement)
+    
+    const markElement = document.createElement('th')
+    markElement.setAttribute('class', 'st_score')
+    markElement.innerText = "Mark"
+    standings.children[0].appendChild(markElement)
+
     const problemsNumber = standingsTop.querySelectorAll('.st_prob').length;
     let krsNumber = 0
-    Array.prototype.slice.call(standingsTop.querySelectorAll('.st_prob')).map(
+    Array.from(standingsTop.querySelectorAll('.st_prob')).map(
         (problem) => {
             if (problem.innerText.indexOf('kr') != -1) {
                 krsNumber += 1
             }
         }
     )
-    const users = Array.prototype.slice.call(standings.querySelectorAll('.st_team')).slice(1, -3)
+    const users = Array
+                    .from(standings.querySelectorAll('.st_team'))
+                    .slice(1, -3)
     users.forEach(
         (user, index) => {
-            const userTotal = parseInt(standings.children[index + 1].querySelector('.st_score').innerText)
-            let userPercentile = parseInt(userTotal / ((problemsNumber + krsNumber) * 100) * 100)
+            const userTotal = parseInt(
+                standings
+                    .children[index + 1]
+                    .querySelector('.st_score')
+                    .innerText
+            )
+            let userPercentile = parseInt(
+                userTotal / ((problemsNumber + krsNumber) * 100) * 100
+            )
             if (userTotal % (problemsNumber + krsNumber) !== 0) {
                 userPercentile += 1
             }
-            user.innerText += ` (${userPercentile}%)`
+
+            let userMark = 0
+            const markRanges = [
+                15, // 1
+                20, // 2
+                25, // 3
+                30, // 4
+                40, // 5
+                45, // 6
+                55, // 7
+                65, // 8
+                75, // 9
+            ]
+
+            markRanges.forEach((goal) => {
+                if (userPercentile >= goal) {
+                    userMark += 1
+                }
+            })
+
+            const userPercentileElement = document.createElement('td')
+            userPercentileElement.setAttribute('class', 'st_score')
+            userPercentileElement.innerText = userPercentile + '%'
+            standings.children[index + 1].appendChild(userPercentileElement)
+
+            const userMarkElement = document.createElement('td')
+            userMarkElement.setAttribute('class', 'st_score')
+            userMarkElement.innerText = userMark
+            standings.children[index + 1].appendChild(userMarkElement)
+
         }
     )
 }
