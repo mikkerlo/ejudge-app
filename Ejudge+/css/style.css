@@ -264,7 +264,7 @@ html .l14 {
   margin: 1em;
 }
 
-div.l14 h2,
+div.l14 h2:first-child,
 table.table-14,
 html #l13 .st_team,
 html #l13 .st_place {
