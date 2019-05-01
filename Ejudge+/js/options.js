@@ -37,14 +37,14 @@ function restoreOptions() {
       hideBad: false,
       hideNew: false,
       hideReg: "",
-      disableSnow: false,
+      enableSnow: false,
     },
     function(items) {
       document.getElementById("hideOk").checked = items.hideOk;
       document.getElementById("hideBad").checked = items.hideBad;
       document.getElementById("hideNew").checked = items.hideNew;
       document.getElementById("hideReg").value = items.hideReg;
-      document.getElementById("disableSnow").checked = items.disableSnow;
+      document.getElementById("enableSnow").checked = items.enableSnow;
     }
   );
 }
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function onLoad() {
   document.getElementById("hideBad").addEventListener("change", saveOption);
   document.getElementById("hideNew").addEventListener("change", saveOption);
   document.getElementById("hideReg").addEventListener("keyup", saveOption);
-  document.getElementById("disableSnow").addEventListener("change", saveOption);
+  document.getElementById("enableSnow").addEventListener("change", saveOption);
 });
 
 /* document.getElementById('hideBad').checked = items.hideBad;

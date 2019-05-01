@@ -44,7 +44,7 @@ html #l12 {
 #main-cont #l11 {
   /* height: 100%; <--------------- */
   border: 3px 10px 3px 3px;
-  background: url('chrome-extension://__MSG_@@extension_id__/img/newyear.png') no-repeat;
+  background: url('chrome-extension://__MSG_@@extension_id__/img/logo.png') no-repeat;
   background-size: 100%;
   top: 0;
   z-index: 10;

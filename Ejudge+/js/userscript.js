@@ -198,11 +198,11 @@ const tableUpdate = () => {
 //////////// Bells and Whistles ////////////
 
 const bellsAndWhistlesUpdate = () => {
-    const key = "disableSnow"
+    const key = "enableSnow"
     storageGet(key)
         .then(it => it[key])
-        .then(disableSnow => {
-            if (!disableSnow) {
+        .then(enableSnow => {
+            if (enableSnow) {
                 const sf = new Snowflakes({
                     count: 50,
                     minSize: 14,
